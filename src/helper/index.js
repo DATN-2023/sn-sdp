@@ -1,4 +1,4 @@
 module.exports = container => {
-  const testHelper = require('./testHelper')(container)
-  return { testHelper }
+  const feedHelper = require('./feedHelper')(container)
+  return { feedHelper }
 }

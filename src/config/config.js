@@ -55,6 +55,7 @@ const serverHelper = function () {
 }
 
 const urlConfig = {
-  testUrl: 'http://localhost:3000'
+  feedUrl: process.env.FEED_URL || 'http://localhost:8003'
 }
+
 module.exports = { dbSettings, serverHelper: serverHelper(), serverSettings, httpCode, urlConfig }
