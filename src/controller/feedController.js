@@ -1,7 +1,17 @@
 module.exports = (container) => {
   const logger = container.resolve('logger')
   const { httpCode, serverHelper } = container.resolve('config')
-  const { feedHelper } = container.resolve('helper')
+  const { feedHelper, userHelper } = container.resolve('helper')
+
+  const mapUserWithTarget = (users, mapTarget) => {
+    const userMap = {}
+    for (const user of users) {
+      userMap[user._id] = user
+    }
+    for (const item of mapTarget) {
+      item.user = userMap[item.createdBy]
+    }
+  }
 
   const getFeed = async (req, res) => {
     try {
@@ -9,6 +19,13 @@ module.exports = (container) => {
       if (statusCode !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg })
       }
+      const { data: feeds } = data
+      const userIds = feeds.map(feed => feed.createdBy)
+      const {data: users, statusCode: sc, msg: m} = await userHelper.getListUserByIdsSDP({ids: userIds})
+      if (sc !== httpCode.SUCCESS) {
+        return res.status(statusCode).json({ msg: m })
+      }
+      mapUserWithTarget(users, feeds)
       return res.status(httpCode.SUCCESS).json(data)
     } catch (e) {
       logger.e(e)
