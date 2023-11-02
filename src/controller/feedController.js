@@ -4,6 +4,10 @@ module.exports = (container) => {
   const { feedHelper, userHelper } = container.resolve('helper')
 
   const mapUserWithTarget = (users, mapTarget) => {
+    if (mapTarget.constructor === Object) {
+      mapTarget.user = users[0]
+      return
+    }
     const userMap = {}
     for (const user of users) {
       userMap[user._id] = user
@@ -40,6 +44,12 @@ module.exports = (container) => {
       if (statusCode !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg })
       }
+      const userId = data.createdBy
+      const {data: users, statusCode: sc, msg: m} = await userHelper.getListUserByIdsSDP({ids: userId})
+      if (sc !== httpCode.SUCCESS) {
+        return res.status(statusCode).json({ msg: m })
+      }
+      mapUserWithTarget(users, data)
       return res.status(httpCode.SUCCESS).json(data)
     } catch (e) {
       logger.e(e)
