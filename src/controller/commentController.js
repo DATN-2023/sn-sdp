@@ -1,7 +1,7 @@
 module.exports = (container) => {
   const logger = container.resolve('logger')
   const { httpCode, serverHelper } = container.resolve('config')
-  const { commentHelper } = container.resolve('helper')
+  const { commentHelper, userHelper } = container.resolve('helper')
 
   const getComment = async (req, res) => {
     try {
@@ -9,6 +9,13 @@ module.exports = (container) => {
       if (statusCode !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg })
       }
+      const { data: comments } = data
+      const userIds = comments.map(comment => comment.createdBy.toString())
+      const {data: users, statusCode: sc, msg: m} = await userHelper.getListUserByIdsSDP({ids: userIds})
+      if (sc !== httpCode.SUCCESS) {
+        return res.status(statusCode).json({ msg: m })
+      }
+      serverHelper.mapUserWithTarget(users, comments)
       return res.status(httpCode.SUCCESS).json(data)
     } catch (e) {
       logger.e(e)

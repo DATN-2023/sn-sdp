@@ -51,7 +51,21 @@ const serverHelper = function () {
     return crypto.createHash('sha256').update(password, 'binary').digest('base64')
   }
 
-  return { decodeToken, encryptPassword, verifyToken, genToken }
+  const mapUserWithTarget = (users, mapTarget) => {
+    if (mapTarget.constructor === Object) {
+      mapTarget.user = users[0]
+      return
+    }
+    const userMap = {}
+    for (const user of users) {
+      userMap[user._id] = user
+    }
+    for (const item of mapTarget) {
+      item.user = userMap[item.createdBy]
+    }
+  }
+
+  return { decodeToken, encryptPassword, verifyToken, genToken, mapUserWithTarget }
 }
 
 const urlConfig = {

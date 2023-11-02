@@ -3,20 +3,6 @@ module.exports = (container) => {
   const { httpCode, serverHelper } = container.resolve('config')
   const { feedHelper, userHelper } = container.resolve('helper')
 
-  const mapUserWithTarget = (users, mapTarget) => {
-    if (mapTarget.constructor === Object) {
-      mapTarget.user = users[0]
-      return
-    }
-    const userMap = {}
-    for (const user of users) {
-      userMap[user._id] = user
-    }
-    for (const item of mapTarget) {
-      item.user = userMap[item.createdBy]
-    }
-  }
-
   const getFeed = async (req, res) => {
     try {
       const { statusCode, data, msg } = await feedHelper.getFeed(req.query)
@@ -29,7 +15,7 @@ module.exports = (container) => {
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }
-      mapUserWithTarget(users, feeds)
+      serverHelper.mapUserWithTarget(users, feeds)
       return res.status(httpCode.SUCCESS).json(data)
     } catch (e) {
       logger.e(e)
@@ -49,7 +35,7 @@ module.exports = (container) => {
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }
-      mapUserWithTarget(users, data)
+      serverHelper.mapUserWithTarget(users, data)
       return res.status(httpCode.SUCCESS).json(data)
     } catch (e) {
       logger.e(e)
