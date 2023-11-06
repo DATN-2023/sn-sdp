@@ -1,4 +1,3 @@
-const axios = require('axios')
 module.exports = (container) => {
   const { urlConfig: { feedUrl }, httpCode } = container.resolve('config')
   const logger = container.resolve('logger')
