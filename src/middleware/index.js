@@ -24,7 +24,7 @@ module.exports = (container) => {
       console.log('TOKEN_EXPIRED 80', decode)
       return res.status(httpCode.TOKEN_EXPIRED).json({})
     }
-    const { statusCode, data: user } = await userHelper.getUserDetail(token)
+    const { statusCode, data: user } = await customerHelper.getUserDetail(token)
     if (statusCode !== httpCode.SUCCESS) {
       console.log('TOKEN_EXPIRED 85', decode)
       return res.status(httpCode.TOKEN_EXPIRED).json({})

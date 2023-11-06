@@ -1,7 +1,7 @@
 module.exports = (container) => {
   const logger = container.resolve('logger')
   const { httpCode, serverHelper } = container.resolve('config')
-  const { feedHelper, userHelper } = container.resolve('helper')
+  const { feedHelper, customerHelper } = container.resolve('helper')
 
   const getFeed = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ module.exports = (container) => {
       }
       const { data: feeds } = data
       const userIds = feeds.map(feed => feed.createdBy)
-      const {data: users, statusCode: sc, msg: m} = await userHelper.getListUserByIdsSDP({ids: userIds})
+      const {data: users, statusCode: sc, msg: m} = await customerHelper.getListUserByIdsSDP({ids: userIds})
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }
@@ -31,7 +31,7 @@ module.exports = (container) => {
         return res.status(statusCode).json({ msg })
       }
       const userId = data.createdBy
-      const {data: users, statusCode: sc, msg: m} = await userHelper.getListUserByIdsSDP({ids: userId})
+      const {data: users, statusCode: sc, msg: m} = await customerHelper.getListUserByIdsSDP({ids: userId})
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }
