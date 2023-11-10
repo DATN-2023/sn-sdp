@@ -11,7 +11,28 @@ module.exports = (container) => {
       }
       const { data: feeds } = data
       const userIds = feeds.map(feed => feed.createdBy)
-      const {data: users, statusCode: sc, msg: m} = await customerHelper.getListUserByIdsSDP({ids: userIds})
+      const { data: users, statusCode: sc, msg: m } = await customerHelper.getListUserByIdsSDP({ ids: userIds })
+      if (sc !== httpCode.SUCCESS) {
+        return res.status(statusCode).json({ msg: m })
+      }
+      serverHelper.mapUserWithTarget(users, feeds)
+      return res.status(httpCode.SUCCESS).json(data)
+    } catch (e) {
+      logger.e(e)
+      res.status(httpCode.UNKNOWN_ERROR).json({ msg: 'UNKNOWN ERROR' })
+    }
+  }
+
+  const getFeedsOfUser = async (req, res) => {
+    try {
+      const { id } = req.params
+      const { statusCode, data, msg } = await feedHelper.getFeed({ createdBy: id })
+      if (statusCode !== httpCode.SUCCESS) {
+        return res.status(statusCode).json({ msg })
+      }
+      const { data: feeds } = data
+      const userIds = [id]
+      const { data: users, statusCode: sc, msg: m } = await customerHelper.getListUserByIdsSDP({ ids: userIds })
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }
@@ -31,7 +52,7 @@ module.exports = (container) => {
         return res.status(statusCode).json({ msg })
       }
       const userId = data.createdBy
-      const {data: users, statusCode: sc, msg: m} = await customerHelper.getListUserByIdsSDP({ids: userId})
+      const { data: users, statusCode: sc, msg: m } = await customerHelper.getListUserByIdsSDP({ ids: userId })
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }
@@ -45,6 +66,7 @@ module.exports = (container) => {
 
   return {
     getFeed,
-    getFeedById
+    getFeedById,
+    getFeedsOfUser
   }
 }
