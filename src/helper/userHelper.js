@@ -22,12 +22,13 @@ module.exports = container => {
     }
   }
 
-  const getUserById = async (id) => {
+  const getUserById = async (id, query) => {
     try {
       const options = {
         headers: { 'x-access-token': accessToken },
         url: `${userUrl}/sdp/users/${id}`,
         json: true,
+        params: query,
         method: 'GET'
       }
       const { data } = await axios(options)

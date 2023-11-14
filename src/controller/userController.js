@@ -19,7 +19,8 @@ module.exports = (container) => {
   const getUserById = async (req, res) => {
     try {
       const { id } = req.params
-      const { statusCode, data, msg } = await userHelper.getUserById(id)
+      const query = req.query
+      const { statusCode, data, msg } = await userHelper.getUserById(id, query)
       if (statusCode !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg })
       }
