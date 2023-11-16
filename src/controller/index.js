@@ -4,5 +4,17 @@ module.exports = (container) => {
   const reactionController = require('./reactionController')(container)
   const uploadController = require('./uploadController')(container)
   const userController = require('./userController')(container)
-  return { feedController, commentController, reactionController, uploadController, userController }
+  const groupController = require('./groupController')(container)
+  const userGroupController = require('./userGroupController')(container)
+  const modController = require('./modController')(container)
+  return {
+    feedController,
+    commentController,
+    reactionController,
+    uploadController,
+    userController,
+    groupController,
+    userGroupController,
+    modController
+  }
 }

@@ -5,5 +5,18 @@ module.exports = container => {
   const uploadHelper = require('./uploadHelper')(container)
   const customerHelper = require('./customerHelper')(container)
   const userHelper = require('./userHelper')(container)
-  return { feedHelper, commentHelper, reactionHelper, uploadHelper, customerHelper, userHelper }
+  const groupHelper = require('./groupHelper')(container)
+  const userGroupHelper = require('./userGroupHelper')(container)
+  const modHelper = require('./modHelper')(container)
+  return {
+    feedHelper,
+    commentHelper,
+    reactionHelper,
+    uploadHelper,
+    customerHelper,
+    userHelper,
+    groupHelper,
+    userGroupHelper,
+    modHelper
+  }
 }

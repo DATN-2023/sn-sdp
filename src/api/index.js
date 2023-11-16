@@ -4,4 +4,7 @@ module.exports = (app, container) => {
   require('./reactionApi')(app, container)
   require('./uploadApi')(app, container)
   require('./userApi')(app, container)
+  require('./groupApi')(app, container)
+  require('./userGroupApi')(app, container)
+  require('./modApi')(app, container)
 }
