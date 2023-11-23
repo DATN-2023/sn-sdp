@@ -10,7 +10,7 @@ module.exports = (container) => {
         return res.status(statusCode).json({ msg })
       }
       const { data: mods } = data
-      const userIds = mods.map(mod => mod.createdBy.toString())
+      const userIds = mods.map(mod => mod.user.toString())
       const {data: users, statusCode: sc, msg: m} = await customerHelper.getListUserByIdsSDP({ids: userIds})
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })

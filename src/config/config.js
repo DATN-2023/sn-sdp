@@ -61,7 +61,7 @@ const serverHelper = function () {
       userMap[user._id] = user
     }
     for (const item of mapTarget) {
-      item.user = userMap[item.createdBy]
+      item.user = userMap[item.createdBy || item.user]
     }
   }
 
