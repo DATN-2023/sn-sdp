@@ -24,6 +24,26 @@ module.exports = (container) => {
     }
   }
 
+  const getJoiningGroups = async (req, res) => {
+    try {
+      const { statusCode, data: groups, msg } = await groupHelper.getJoiningGroups(req.query)
+      if (statusCode !== httpCode.SUCCESS) {
+        return res.status(statusCode).json({ msg })
+      }
+      if (!groups.length) return res.status(httpCode.SUCCESS).json(groups)
+      const userIds = groups.map(group => group.createdBy.toString())
+      const {data: users, statusCode: sc, msg: m} = await customerHelper.getListUserByIdsSDP({ids: userIds})
+      if (sc !== httpCode.SUCCESS) {
+        return res.status(statusCode).json({ msg: m })
+      }
+      serverHelper.mapUserWithTarget(users, groups)
+      return res.status(httpCode.SUCCESS).json(groups)
+    } catch (e) {
+      logger.e(e)
+      res.status(httpCode.UNKNOWN_ERROR).json({ msg: 'UNKNOWN ERROR' })
+    }
+  }
+
   const getGroupById = async (req, res) => {
     try {
       const { id } = req.params
@@ -40,6 +60,7 @@ module.exports = (container) => {
 
   return {
     getGroup,
-    getGroupById
+    getGroupById,
+    getJoiningGroups
   }
 }
