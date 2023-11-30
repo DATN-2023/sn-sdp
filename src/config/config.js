@@ -73,7 +73,8 @@ const urlConfig = {
   uploadUrl: process.env.UPLOAD_URL || 'http://localhost:8004',
   customerUrl: process.env.CUSTOMER_URL || 'http://localhost:8005',
   userUrl: process.env.USER_URL || 'http://localhost:8006',
-  groupUrl: process.env.GROUP_URL || 'http://localhost:8007'
+  groupUrl: process.env.GROUP_URL || 'http://localhost:8007',
+  notificationUrl: process.env.NOTIFICATION_URL || 'http://localhost:8008'
 }
 
 module.exports = { dbSettings, serverHelper: serverHelper(), serverSettings, httpCode, urlConfig }

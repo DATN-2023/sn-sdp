@@ -8,6 +8,7 @@ module.exports = container => {
   const groupHelper = require('./groupHelper')(container)
   const userGroupHelper = require('./userGroupHelper')(container)
   const modHelper = require('./modHelper')(container)
+  const notificationHelper = require('./notificationHelper')(container)
   return {
     feedHelper,
     commentHelper,
@@ -17,6 +18,7 @@ module.exports = container => {
     userHelper,
     groupHelper,
     userGroupHelper,
-    modHelper
+    modHelper,
+    notificationHelper
   }
 }
