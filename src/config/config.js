@@ -58,7 +58,7 @@ const serverHelper = function () {
     }
     const userMap = {}
     for (const user of users) {
-      userMap[user._id] = user
+      userMap[user.customerId] = user
     }
     for (const item of mapTarget) {
       item.user = userMap[item.createdBy || item.user]

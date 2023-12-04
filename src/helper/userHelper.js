@@ -21,6 +21,22 @@ module.exports = container => {
       return { statusCode: httpCode.BAD_REQUEST, msg: '' }
     }
   }
+  const getUserByIds = async (q) => {
+    try {
+      const options = {
+        headers: { 'x-access-token': accessToken },
+        url: `${userUrl}/sdp/users/ids`,
+        json: true,
+        params: q,
+        method: 'GET'
+      }
+      const { data } = await axios(options)
+      return { statusCode: httpCode.SUCCESS, data }
+    } catch (e) {
+      logger.e(e)
+      return { statusCode: httpCode.BAD_REQUEST, msg: '' }
+    }
+  }
 
   const getUserById = async (id, query) => {
     try {
@@ -76,6 +92,7 @@ module.exports = container => {
     getUser,
     getUserById,
     getFriend,
-    getFriendById
+    getFriendById,
+    getUserByIds
   }
 }

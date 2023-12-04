@@ -1,7 +1,7 @@
 module.exports = (container) => {
   const logger = container.resolve('logger')
   const { httpCode, serverHelper } = container.resolve('config')
-  const { groupHelper, customerHelper } = container.resolve('helper')
+  const { groupHelper, userHelper } = container.resolve('helper')
 
   const getGroup = async (req, res) => {
     try {
@@ -12,7 +12,7 @@ module.exports = (container) => {
       const { data: groups } = data
       if (!groups.length) return res.status(httpCode.SUCCESS).json(data)
       const userIds = groups.map(group => group.createdBy.toString())
-      const {data: users, statusCode: sc, msg: m} = await customerHelper.getListUserByIdsSDP({ids: userIds})
+      const {data: users, statusCode: sc, msg: m} = await userHelper.getUserByIds({ids: userIds})
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }
@@ -32,7 +32,7 @@ module.exports = (container) => {
       }
       if (!groups.length) return res.status(httpCode.SUCCESS).json(groups)
       const userIds = groups.map(group => group.createdBy.toString())
-      const {data: users, statusCode: sc, msg: m} = await customerHelper.getListUserByIdsSDP({ids: userIds})
+      const {data: users, statusCode: sc, msg: m} = await userHelper.getUserByIds({ids: userIds})
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }

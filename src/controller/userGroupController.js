@@ -1,7 +1,7 @@
 module.exports = (container) => {
   const logger = container.resolve('logger')
   const { httpCode, serverHelper } = container.resolve('config')
-  const { userGroupHelper, customerHelper } = container.resolve('helper')
+  const { userGroupHelper, userHelper } = container.resolve('helper')
 
   const getUserGroup = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ module.exports = (container) => {
       }
       const { data: userGroups } = data
       const userIds = userGroups.map(userGroup => userGroup.user.toString())
-      const {data: users, statusCode: sc, msg: m} = await customerHelper.getListUserByIdsSDP({ids: userIds})
+      const {data: users, statusCode: sc, msg: m} = await userHelper.getUserByIds({ids: userIds})
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }
