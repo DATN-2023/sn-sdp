@@ -3,6 +3,6 @@ module.exports = (app, container) => {
   const { feedController } = container.resolve('controller')
   const { basePath } = serverSettings
   app.get(`${basePath}/feeds`, feedController.getFeed)
-  app.get(`${basePath}/feeds/users/:id`, feedController.getFeedsOfUser)
+  app.get(`${basePath}/feeds/users`, feedController.getFeedsOfUser)
   app.get(`${basePath}/feeds/:id`, feedController.getFeedById)
 }

@@ -25,13 +25,11 @@ module.exports = (container) => {
 
   const getFeedsOfUser = async (req, res) => {
     try {
-      let { id } = req.params
-      let userRequest
-      if (id) {
-        id = id.split('-')[0]
-        userRequest = id.split('-')[1]
-      }
-      const { statusCode, data, msg } = await feedHelper.getFeed({ createdBy: id, userRequest })
+      const q = req.query
+      const id = q.id
+      delete q.id
+      q.createdBy = id
+      const { statusCode, data, msg } = await feedHelper.getFeed(q)
       if (statusCode !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg })
       }
