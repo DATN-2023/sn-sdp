@@ -8,6 +8,7 @@ module.exports = (container) => {
   const userGroupController = require('./userGroupController')(container)
   const modController = require('./modController')(container)
   const notificationController = require('./notificationController')(container)
+  const chatController = require('./chatController')(container)
   return {
     feedController,
     commentController,
@@ -17,6 +18,7 @@ module.exports = (container) => {
     groupController,
     userGroupController,
     modController,
-    notificationController
+    notificationController,
+    chatController
   }
 }

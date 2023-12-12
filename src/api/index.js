@@ -8,4 +8,5 @@ module.exports = (app, container) => {
   require('./userGroupApi')(app, container)
   require('./modApi')(app, container)
   require('./notificationApi')(app, container)
+  require('./chatApi')(app, container)
 }
