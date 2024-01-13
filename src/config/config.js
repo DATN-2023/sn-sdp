@@ -65,7 +65,21 @@ const serverHelper = function () {
     }
   }
 
-  return { decodeToken, encryptPassword, verifyToken, genToken, mapUserWithTarget }
+  const mapGroupWithTarget = (groups, mapTarget) => {
+    if (mapTarget.constructor === Object) {
+      mapTarget.user = groups[0]
+      return
+    }
+    const map = {}
+    for (const group of groups) {
+      map[group._id] = group
+    }
+    for (const item of mapTarget) {
+      item.group = map[item.groupId]
+    }
+  }
+
+  return { decodeToken, encryptPassword, verifyToken, genToken, mapUserWithTarget, mapGroupWithTarget }
 }
 
 const urlConfig = {

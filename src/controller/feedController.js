@@ -1,7 +1,7 @@
 module.exports = (container) => {
   const logger = container.resolve('logger')
   const { httpCode, serverHelper } = container.resolve('config')
-  const { feedHelper, userHelper } = container.resolve('helper')
+  const { feedHelper, userHelper, groupHelper } = container.resolve('helper')
 
   const getFeed = async (req, res) => {
     try {
@@ -11,11 +11,17 @@ module.exports = (container) => {
       }
       const { data: feeds } = data
       const userIds = feeds.map(feed => feed.createdBy)
+      const groupIds = feeds.map(feed => feed.groupId).filter(group => group)
       const { data: users, statusCode: sc, msg: m } = await userHelper.getUserByIds({ ids: userIds })
       if (sc !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg: m })
       }
       serverHelper.mapUserWithTarget(users, feeds)
+      const { data: datagroup, statusCode: groupSc, msg: groupErr } = await groupHelper.getGroup({ ids: groupIds })
+      if (groupSc !== httpCode.SUCCESS) {
+        return res.status(statusCode).json({ msg: groupErr })
+      }
+      serverHelper.mapGroupWithTarget(datagroup?.data || [], feeds)
       return res.status(httpCode.SUCCESS).json(data)
     } catch (e) {
       logger.e(e)

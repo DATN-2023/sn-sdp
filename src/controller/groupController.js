@@ -5,7 +5,7 @@ module.exports = (container) => {
 
   const getGroup = async (req, res) => {
     try {
-      const { statusCode, data, msg } = await groupHelper.getGroup(req.query)
+      const { statusCode, data, msg } = await groupHelper.getRandomGroup(req.query)
       if (statusCode !== httpCode.SUCCESS) {
         return res.status(statusCode).json({ msg })
       }
